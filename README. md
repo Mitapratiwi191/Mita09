@@ -1,0 +1,27 @@
+# 🤖 Bot WhatsApp Premium - Mita09
+
+Selamat datang di **Mita09**, bot WhatsApp multifungsi berbasis Node.js dengan fitur premium dan lengkap.  
+Didesain untuk mempermudah manajemen grup, hiburan, hingga keamanan otomatis.
+
+## 🌟 Fitur Utama
+- ✅ Anti-link & Anti-badword
+- ✅ Auto welcome & goodbye
+- ✅ Sistem warn & kick otomatis
+- ✅ Fitur musik & AI Chat
+- ✅ Mode publik/pribadi
+- ✅ Auto hapus foto view once
+- ✅ Tag all, menu interaktif, auto respon
+- ✅ Sistem premium, panel owner lengkap
+- ✅ Dan masih banyak lagi...
+
+## ⚙️ Cara Install di Termux
+1. Buka aplikasi **Termux** di HP kamu
+2. Masukkan perintah ini satu per satu:
+
+```bash
+pkg update && pkg upgrade
+pkg install git nodejs ffmpeg imagemagick
+git clone https://github.com/Mitapratiwi424/Mita09
+cd Mita09
+npm install
+node index.js
