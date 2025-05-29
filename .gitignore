@@ -1,3 +1,6 @@
-node_modules
-session
+node_modules/
+session/
 .env
+*.log
+*.sqlite
+*.zip
