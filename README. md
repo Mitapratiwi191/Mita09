@@ -21,7 +21,7 @@ Didesain untuk mempermudah manajemen grup, hiburan, hingga keamanan otomatis.
 ```bash
 pkg update && pkg upgrade
 pkg install git nodejs ffmpeg imagemagick
-git clone https://github.com/Mitapratiwi424/Mita09
+git clone https://github.com/Mitapratiwi191/Mita09
 cd Mita09
 npm install
 node index.js
