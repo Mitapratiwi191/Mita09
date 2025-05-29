@@ -1,21 +1,48 @@
-const { Boom } = require("@hapi/boom")
-const makeWASocket = require("@whiskeysockets/baileys").default
-const pino = require("pino")
 
-async function startBot() {
+const { default: makeWASocket, useSingleFileAuthState } = require('@adiwajshing/baileys')
+const figlet = require('figlet')
+const chalk = require('chalk')
+const fs = require('fs')
+const moment = require('moment')
+const config = require('./config')
+
+const { state, saveState } = useSingleFileAuthState('./session.json')
+
+console.log(chalk.green(figlet.textSync(config.botName)))
+
+const startBot = async () => {
   const sock = makeWASocket({
-    logger: pino({ level: "silent" }),
-    printQRInTerminal: true
+    auth: state,
+    printQRInTerminal: true,
   })
 
-  sock.ev.on("connection.update", ({ connection, lastDisconnect }) => {
-    if (connection === "close") {
-      const shouldReconnect = (lastDisconnect.error = Boom)?.output?.statusCode !== 401
-      if (shouldReconnect) {
-        startBot()
+  sock.ev.on('creds.update', saveState)
+
+  sock.ev.on('messages.upsert', async ({ messages }) => {
+    const msg = messages[0]
+    if (!msg.message || msg.key.fromMe) return
+
+    const from = msg.key.remoteJid
+    const message = msg.message.conversation || msg.message.extendedTextMessage?.text
+    const sender = msg.key.participant || msg.key.remoteJid
+
+    if (!message) return
+
+    console.log(`[${moment().format('HH:mm:ss')}] Pesan dari ${from}: ${message}`)
+
+    if (message.startsWith(config.prefix)) {
+      const command = message.slice(1).trim().toLowerCase()
+
+      switch (command) {
+        case 'menu':
+          sock.sendMessage(from, { text: `Halo, ini ${config.botName}!\n\n🛠 Fitur:\n- .menu\n- .owner\n- .donasi (bisa kamu tambah di sini)` })
+          break
+        case 'owner':
+          sock.sendMessage(from, { text: `Owner bot ini: wa.me/${config.ownerNumber[0]}` })
+          break
+        default:
+          sock.sendMessage(from, { text: 'Perintah tidak dikenal!' })
       }
-    } else if (connection === "open") {
-      console.log("✅ Bot Mita09 berhasil tersambung!")
     }
   })
 }
