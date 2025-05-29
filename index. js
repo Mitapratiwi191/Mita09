@@ -1,1 +1,23 @@
-console.log("Bot WhatsApp Premium Aktif!");
+const { Boom } = require("@hapi/boom")
+const makeWASocket = require("@whiskeysockets/baileys").default
+const pino = require("pino")
+
+async function startBot() {
+  const sock = makeWASocket({
+    logger: pino({ level: "silent" }),
+    printQRInTerminal: true
+  })
+
+  sock.ev.on("connection.update", ({ connection, lastDisconnect }) => {
+    if (connection === "close") {
+      const shouldReconnect = (lastDisconnect.error = Boom)?.output?.statusCode !== 401
+      if (shouldReconnect) {
+        startBot()
+      }
+    } else if (connection === "open") {
+      console.log("✅ Bot Mita09 berhasil tersambung!")
+    }
+  })
+}
+
+startBot()
